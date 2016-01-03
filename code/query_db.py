@@ -10,9 +10,9 @@ import sqlite3
 
 # Read sqlite query results into a pandas DataFrame
 conn = sqlite3.connect("babysleep_test.db")
-db_data = pd.read_sql_query("SELECT * from sleep_data", conn)
+data = pd.read_sql_query("SELECT * from sleep_data", conn)
 
 # verify that result of SQL query is stored in the dataframe
-print db_data.head()
+print data.head()
 
 conn.close()
