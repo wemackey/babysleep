@@ -15,10 +15,6 @@ matplotlib.style.use('ggplot')
 # Read sqlite query results into a pandas DataFrame
 conn = sqlite3.connect("babysleep_test.db")
 data = pd.read_sql_query("SELECT * from sleep_data", conn)
-
-# verify that result of SQL query is stored in the dataframe
-print data.head()
-
 conn.close()
 
 # clean and organize data
@@ -49,7 +45,7 @@ data_kID.index = data_kID.startTime
 df = data_kID.durationMin
 sleepDur = df[(data_kID['activity'] == "Sleep")]
 sleep_to_plot = sleepDur[sleepDur>180]
-sleep_to_plot.plot(style='.',alpha=0.9,figsize=(12,4))
+sleep_to_plot.plot(style='.',alpha=0.3,figsize=(12,4))
 
 # plot moving average
 mavg = pd.rolling_mean(sleep_to_plot, 20)
@@ -72,13 +68,16 @@ filtered.plot(kind='hist', alpha=0.5)
 
 data['quantity'].plot(kind='hist', alpha=0.5)
 
-
 # segment by day
+cnt = sleep_to_plot.groupby(sleep_to_plot.index.date).count()
+cnt.plot(kind='hist')
+
 # plot 
 
 # segment by hour
 # plot
 
-# save file
+# food
+# nursing, bottle, solid food, ?
 
 # combine months
