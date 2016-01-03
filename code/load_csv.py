@@ -26,9 +26,9 @@ data['endTime'] = pd.to_datetime(data['endTime'],errors='coerce')
 # sort by kidID -> startTime
 data.sort_index(by=['kidID', 'startTime'])
 
-# remove duplicate entries
+# remove duplicate entries?
 
-# check if other activities occur while kid is asleep
+# check if other activities occur while kid is asleep?
 
 # get sleep duration data from 1 kid
 # first get all kidIDs
@@ -59,6 +59,7 @@ plt.plot(sleep_to_plot.index, sleep_to_plot, 'r.')
 plt.plot(mavg.index, mavg, 'b')
 plt.fill_between(mstd.index, mavg-2*mstd, mavg+2*mstd, color='b', alpha=0.2)
 
+# group by startTime
 g = data_kID.groupby('startTime')
 
 # filter duration data and plot

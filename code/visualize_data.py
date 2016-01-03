@@ -13,15 +13,10 @@ df = data_kID.durationMin
 sleepDur = df[(data_kID['activity'] == "Sleep")]
 x = sleepDur[sleepDur>180]
 
-# get timestamps
-dt = data_kID.startTime
-sleepStart = dt[(data_kID['activity'] == "Sleep")]
-y = sleepStart[sleepDur>180]
-
 data_plot = [
     go.Scatter(
-        x=x,
-        y=y
+        x=x.index,
+        y=x
     )
 ]
 
