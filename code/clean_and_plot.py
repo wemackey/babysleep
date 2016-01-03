@@ -50,6 +50,7 @@ sleep_to_plot.plot(style='.',alpha=0.3,figsize=(12,4))
 # plot moving average
 mavg = pd.rolling_mean(sleep_to_plot, 20)
 mstd = pd.rolling_std(sleep_to_plot, 20)
+mstd_avg = pd.rolling_mean(mstd,20)
 mavg.plot(linewidth=3)
 
 # plot using matplotlib only
