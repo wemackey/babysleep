@@ -44,7 +44,7 @@ data_kID.index = data_kID.startTime
 # plot sleep data across time
 df = data_kID.durationMin
 sleepDur = df[(data_kID['activity'] == "Sleep")]
-sleep_to_plot = sleepDur[sleepDur>180]
+sleep_to_plot = sleepDur
 sleep_to_plot.plot(style='.',alpha=0.3,figsize=(12,4))
 
 # plot moving average
