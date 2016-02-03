@@ -4,9 +4,126 @@ Created on Fri Jan  1 14:08:51 2016
 
 @author: wayne
 """
+# TO DO: Clean up web data.
+# Get rid of apostrophes
+# Turn '' to Null
 
 import sqlite3
 import pandas as pd
+import numpy as np
+
+#
+# WEB DATA ---------------------------
+#
+
+# set up web data tables
+# from baby info web dump
+# setup io file names
+inFile = "/Users/wayne/babysleep/db/webform_views_baby_info20160130120006_fixed.csv"
+
+# load csv
+hdr = (['sID', 'uID', 'birthOrder', 'ofTotalBorn', 'del_me','pounds', 'ounces', 
+        'within2Weeks','weeksEarly','weeksLate','progress','email','kID','kidRace', 'specifyRace',
+        'ethnicity','birthCity','seriousInjury','describeInjury','earInfection',
+        'timeSinceEarInfection','hearingLoss','describeHearingLoss','timeStamp','ip'])
+baby_info_table = pd.read_csv(inFile, header=0, names=hdr)
+baby_info_table = baby_info_table.replace({"''":np.nan},regex=True)
+baby_info_table = baby_info_table.replace({"'":""},regex=True)
+
+# from sibling info web dump
+# setup io file names
+inFile = "/Users/wayne/babysleep/db/webform_views_biological_sibling_info20160130120006_fixed.csv"
+
+# load csv
+hdr = (['sID', 'uID', 'bs1FirstName', 'bs2FirstName', 'bs3FirstName','bs4FirstName', 'bs5FirstName', 
+        'bs6FirstName','bs7FirstName','bs8FirstName','bs9FirstName','bs1MiddleInitial','bs2MiddleInitial',
+        'bs3MiddleInitial', 'bs4MiddleInitial','bs5MiddleInitial', 'bs6MiddleInitial','bs7MiddleInitial',
+        'bs8MiddleInitial','bs9MiddleInitial','bs1DOB','bs2DOB','bs3DOB','bs4DOB','bs5DOB','bs6DOB',
+        'bs7DOB','bs8DOB','bs9DOB','bs1Gender','bs2Gender','bs3Gender','bs4Gender','bs5Gender',
+        'bs6Gender','bs7Gender','bs8Gender','bs9Gender','bs1AddSibling','bs2AddSibling','bs3AddSibling',
+        'bs4AddSibling','bs5AddSibling','bs6AddSibling','bs7AddSibling','bs8AddSibling','bs9AddSibling',
+        'email','kID','anySiblings','timeStamp','ip'])
+sibling_info_table = pd.read_csv(inFile, header=0, names=hdr)
+sibling_info_table = sibling_info_table.replace({"''":np.nan},regex=True)
+sibling_info_table = sibling_info_table.replace({"'":""},regex=True)
+
+# from diagnosis info web dump
+# setup io file names
+inFile = "/Users/wayne/babysleep/db/webform_views_child_diagnosis20160130120006_fixed.csv"
+
+# load csv
+hdr = ['sID', 'uID', 'email', 'kID', 'diagnosis','other', 'timestamp','ip'] 
+diagnosis_info_table = pd.read_csv(inFile, header=0, names=hdr)
+diagnosis_info_table = diagnosis_info_table.replace({"''":np.nan},regex=True)
+diagnosis_info_table = diagnosis_info_table.replace({"'":""},regex=True)
+
+# from register info web dump
+# setup io file names
+inFile = "/Users/wayne/babysleep/db/webform_views_register_your_baby_for_the_research_study20160130120006_fixed.csv"
+
+# load csv
+hdr = (['sID', 'uID', 'instructions', 'instructions1', 'instructions2','instructions3', 'email', 
+        'kID','instructionsKid','DOB','gender','firstName','middleInitial','instructions4',
+        'instructions5','instructions6','timeStamp','ip'])
+register_info_data = pd.read_csv(inFile, header=0, names=hdr)
+
+# Now let's trim useless columns and create tables
+register_info_table = register_info_data.drop('instructions',axis=1)
+register_info_table = register_info_table.drop('instructions1',axis=1)
+register_info_table = register_info_table.drop('instructions2',axis=1)
+register_info_table = register_info_table.drop('instructions3',axis=1)
+register_info_table = register_info_table.drop('instructions4',axis=1)
+register_info_table = register_info_table.drop('instructions5',axis=1)
+register_info_table = register_info_table.drop('instructions6',axis=1)
+register_info_table = register_info_table.replace({"''":np.nan},regex=True)
+register_info_table = register_info_table.replace({"'":""},regex=True)
+
+# from parent info web dump
+# setup io file names
+inFile = "/Users/wayne/babysleep/db/webform_views_parent_info20160130120006_fixed.csv"
+
+# load csv
+hdr = (['sID','uID','numAdults','numChildren','spouseRelationship','spouseRelationshipOther',
+        'spouseDOB','fatherDOB','spouseEmploymentStatus','fatherCityOfBirth','spouseEmploymentOther',
+        'fatherRace','spouseOccupation','fatherRaceOther','spouseInvolved','fatherEthnicity',
+        'homeLanguages','oftenEnglish','motherDOB','motherCityOfBirth','motherRace','motherRaceOther',
+        'motherEthnicity','progress','email','kID','yourRelation','yourRelationOther','yourDOB',
+        'yourCityOfBirth','yourRace','yourRaceSpecify','yourEthnicity','educationLevel','maritalStatus',
+        'yourEmploymentStatus','yourEmploymentOther','yourOccupation','householdIncome','zipCode',
+        'liveWithSpouse','timestamp','ip'])
+parent_info_data = pd.read_csv(inFile, header=0, names=hdr)
+
+# Now let's trim useless columns and create tables
+parent_info_table = parent_info_data.drop('progress',axis=1)
+parent_info_table = parent_info_table.replace({"''":np.nan},regex=True)
+parent_info_table = parent_info_table.replace({"'":""},regex=True)
+
+# from family info web dump
+# setup io file names
+inFile = "/Users/wayne/babysleep/db/webform_views_family_info20160130120006_fixed.csv"
+
+# load csv
+hdr = (['sID', 'uID', 'f1FirstName', 'f2FirstName', 'f3FirstName','f4FirstName', 'f5FirstName', 
+        'f6FirstName','f7FirstName','f8FirstName','f9FirstName','f1MiddleInitial','f2MiddleInitial',
+        'f3MiddleInitial', 'f4MiddleInitial','f5MiddleInitial', 'f6MiddleInitial','f7MiddleInitial',
+        'f8MiddleInitial','f9MiddleInitial','f1DOB','f2DOB','f3DOB','f4DOB','f5DOB','f6DOB',
+        'f7DOB','f8DOB','f9DOB','f1Gender','f2Gender','f3Gender','f4Gender','f5Gender',
+        'f6Gender','f7Gender','f8Gender','f9Gender','f1Relation','f2Relation','f3Relation',
+        'f4Relation','f5Relation','f6Relation','f7Relation','f8Relation','f9Relation','f1Diagnosis',
+        'f2Diagnosis','f3Diagnosis','f4Diagnosis','f5Diagnosis','f6Diagnosis','f7Diagnosis',
+        'f8Diagnosis','f9Diagnosis','f1AddFamily','f2AddFamily','f3AddFamily','f4AddFamily','f5AddFamily',
+        'f6AddFamily','f7AddFamily','f8AddFamily','progress','email','kID',
+        'babyFamilyDiagnosed','timeStamp','ip'])
+family_info_data = pd.read_csv(inFile, header=0, names=hdr)
+
+# Now let's trim useless columns and create tables
+family_info_table = family_info_data.drop('progress',axis=1)
+family_info_table = family_info_table.replace({"''":np.nan},regex=True)
+family_info_table = family_info_table.replace({"'":""},regex=True)
+
+#
+# APP DATA ---------------------------
+#
 
 # setup io file names for app data
 inFile = "/Users/wayne/Downloads/Archive/clean_merged.csv"
@@ -109,7 +226,15 @@ weight_table = weight_table.drop('durationMin',axis=1)
 conn = sqlite3.connect('babysleep.db')
 conn.text_factory = str
 
-# make sure dataframe exists
+# write tables WEB
+baby_info_table.to_sql(con=conn, name='Baby_Info', if_exists='replace', flavor='sqlite', index=False)
+diagnosis_info_table.to_sql(con=conn, name='Diagnosis_Info', if_exists='replace', flavor='sqlite', index=False)
+family_info_table.to_sql(con=conn, name='Family_Info', if_exists='replace', flavor='sqlite', index=False)
+parent_info_table.to_sql(con=conn, name='Parent_Info', if_exists='replace', flavor='sqlite', index=False)
+register_info_table.to_sql(con=conn, name='Register_Info', if_exists='replace', flavor='sqlite', index=False)
+sibling_info_table.to_sql(con=conn, name='Sibling_Info', if_exists='replace', flavor='sqlite', index=False)
+
+# write tables APP
 kid_table.to_sql(con=conn, name='Kids', if_exists='replace', flavor='sqlite', index=False)
 entry_table.to_sql(con=conn, name='Entries', if_exists='replace', flavor='sqlite', index=False)
 sleep_table.to_sql(con=conn, name='Sleep', if_exists='replace', flavor='sqlite', index=False)
