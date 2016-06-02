@@ -259,3 +259,35 @@ sleepstart_table.to_sql(con=conn, name='Sleep_Start', if_exists='replace', flavo
 
 # close connection
 conn.close()
+
+# create CSV files for MATLAB import
+# write tables WEB
+baby_info_table.to_csv('baby_info.csv',sep='\t')
+diagnosis_info_table.to_csv('diagnosis_info.csv',sep='\t')
+family_info_table.to_csv('family_info.csv',sep='\t')
+parent_info_table.to_csv('parent_info.csv',sep='\t')
+register_info_table.to_csv('register_info.csv',sep='\t')
+sibling_info_table.to_csv('sibling_info.csv',sep='\t')
+
+# write tables APP
+kid_table.to_csv('kid_table.csv',sep='\t')
+entry_table.to_csv('entry_table.csv',sep='\t')
+sleep_table.to_csv('sleep_table.csv',sep='\t')
+diaper_table.to_csv('diaper_table.csv',sep='\t')
+mood_table.to_csv('mood_table.csv',sep='\t')
+milestone_table.to_csv('milestone_table.csv',sep='\t')
+nursing_table.to_csv('nursing_table.csv',sep='\t')
+weight_table.to_csv('weight_table.csv',sep='\t')
+diary_table.to_csv('diary_table.csv',sep='\t')
+health_table.to_csv('health_table.csv',sep='\t')
+height_table.to_csv('height_table.csv',sep='\t')
+headsize_table.to_csv('headsize_table.csv',sep='\t')
+activity_table.to_csv('activity_table.csv',sep='\t')
+bottle_table.to_csv('bottle_table.csv',sep='\t')
+expressed_table.to_csv('expressed_table.csv',sep='\t')
+solidfood_table.to_csv('solidfood_table.csv',sep='\t')
+message_table.to_csv('message_table.csv',sep='\t')
+medicine_table.to_csv('medicine_table.csv',sep='\t')
+temperature_table.to_csv('temperature_table.csv',sep='\t')
+potty_table.to_csv('potty_table.csv',sep='\t')
+sleepstart_table.to_csv('sleepstart_table.csv',sep='\t')
