@@ -11,14 +11,14 @@ import matplotlib
 matplotlib.style.use('ggplot')
 
 # setup io file names
-inFile = "/Users/wayne/Downloads/nyu-160503-6.csv"
-inFile2 = "/Users/wayne/Downloads/Archive/clean_merged_new.csv"
-outFile = "/Users/wayne/Downloads/Archive/clean_merged_new.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/nyu-160401.csv"
+inFile2 = "/Users/wayne/babysleep/code/ParticipantDataDumps/clean_merged_new.csv"
+outFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/clean_merged_new.csv"
 
 # load csv
 hdr = ['kidID', 'entryID', 'startTime', 'endTime', 'activity','durationMin','quantity','extraData','text','notes','caregiver','childName']
-data = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quoting=3)
-data2 = pd.read_csv(inFile2, header=0, names=hdr,error_bad_lines=False,quoting=3)
+data = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quotechar='"') # quoting=3
+data2 = pd.read_csv(inFile2, header=0, names=hdr,error_bad_lines=False,quotechar='"') # quoting=3
 
 data_merged = [data, data2]
 data_merged = pd.concat(data_merged)

@@ -40,18 +40,18 @@ isSame_register_your_baby = data1.equals(data2)
 #############
    
 # Specify input CSV files
-inFile1 = "/Users/wayne/babysleep/test_dump/webform_views_baby_info20160515060010.csv"
-inFile2 = "/Users/wayne/babysleep/backup_5_5_16/webform_views_baby_info20160505180005.csv"
+inFile1 = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_baby_info20160623000015.csv"
+inFile2 = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_baby_info20160716060024.csv"
 
 # Specify header organization
-hdr = (['sID', 'uID', 'birthOrder', 'ofTotalBorn', 'del_me','pounds', 'ounces', 
+hdr = (['x','y','z','rid', 'sID', 'uID', 'birthOrder', 'ofTotalBorn', 'del_me','pounds', 'ounces', 
         'within2Weeks','weeksEarly','weeksLate','progress','email','kID','kidRace', 'specifyRace',
         'ethnicity','birthCity','seriousInjury','describeInjury','earInfection',
-        'timeSinceEarInfection','hearingLoss','describeHearingLoss','timeStamp','ip'])
+        'timeSinceEarInfection','hearingLoss','describeHearingLoss','timeStamp','ip'])       
         
 # Load into dataframes
-data1 = pd.read_csv(inFile1, header=0, names=hdr, error_bad_lines=False)
-data2 = pd.read_csv(inFile1, header=0, names=hdr, error_bad_lines=False)
+data1 = pd.read_csv(inFile1, header=0, names=hdr, error_bad_lines=False,quotechar='\'')
+data2 = pd.read_csv(inFile2, header=0, names=hdr, error_bad_lines=False,quotechar='\'')
 
 isSame_baby_info = data1.equals(data2)
 

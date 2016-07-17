@@ -12,30 +12,34 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-#
-# WEB DATA ---------------------------
-#
+########################################
+# ------------------------------------ #
+# WEB DATA --------------------------- #
+# ------------------------------------ #
+########################################
 
 # set up web data tables
 # from baby info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/db/webform_views_baby_info20160130120006_fixed.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_baby_info20160716060024.csv"
 
 # load csv
-hdr = (['sID', 'uID', 'birthOrder', 'ofTotalBorn', 'del_me','pounds', 'ounces', 
+hdr = (['rID','sID', 'uID', 'birthOrder', 'ofTotalBorn','deleteMe','pounds', 'ounces', 
         'within2Weeks','weeksEarly','weeksLate','progress','email','kID','kidRace', 'specifyRace',
         'ethnicity','birthCity','seriousInjury','describeInjury','earInfection',
-        'timeSinceEarInfection','hearingLoss','describeHearingLoss','timeStamp','ip'])
-baby_info_table = pd.read_csv(inFile, header=0, names=hdr)
+        'timeSinceEarInfection','hearingLoss','describeHearingLoss',
+        'whereSleep','developmentalDisorder','specifyDevelopmentalDisorder',
+        'specifyOtherDisorder','timeStamp','ip'])
+baby_info_table = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quotechar='\'')
 baby_info_table = baby_info_table.replace({"''":np.nan},regex=True)
 baby_info_table = baby_info_table.replace({"'":""},regex=True)
 
 # from sibling info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/db/webform_views_biological_sibling_info20160130120006_fixed.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_biological_sibling_info20160716060025.csv"
 
 # load csv
-hdr = (['sID', 'uID', 'bs1FirstName', 'bs2FirstName', 'bs3FirstName','bs4FirstName', 'bs5FirstName', 
+hdr = (['rID', 'sID', 'uID', 'bs1FirstName', 'bs2FirstName', 'bs3FirstName','bs4FirstName', 'bs5FirstName', 
         'bs6FirstName','bs7FirstName','bs8FirstName','bs9FirstName','bs1MiddleInitial','bs2MiddleInitial',
         'bs3MiddleInitial', 'bs4MiddleInitial','bs5MiddleInitial', 'bs6MiddleInitial','bs7MiddleInitial',
         'bs8MiddleInitial','bs9MiddleInitial','bs1DOB','bs2DOB','bs3DOB','bs4DOB','bs5DOB','bs6DOB',
@@ -43,29 +47,29 @@ hdr = (['sID', 'uID', 'bs1FirstName', 'bs2FirstName', 'bs3FirstName','bs4FirstNa
         'bs6Gender','bs7Gender','bs8Gender','bs9Gender','bs1AddSibling','bs2AddSibling','bs3AddSibling',
         'bs4AddSibling','bs5AddSibling','bs6AddSibling','bs7AddSibling','bs8AddSibling','bs9AddSibling',
         'email','kID','anySiblings','timeStamp','ip'])
-sibling_info_table = pd.read_csv(inFile, header=0, names=hdr)
+sibling_info_table = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quotechar='\'')
 sibling_info_table = sibling_info_table.replace({"''":np.nan},regex=True)
 sibling_info_table = sibling_info_table.replace({"'":""},regex=True)
 
 # from diagnosis info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/db/webform_views_child_diagnosis20160130120006_fixed.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_child_diagnosis20160716060031.csv"
 
 # load csv
-hdr = ['sID', 'uID', 'email', 'kID', 'diagnosis','other', 'timestamp','ip'] 
-diagnosis_info_table = pd.read_csv(inFile, header=0, names=hdr)
+hdr = ['rID','sID', 'uID', 'email', 'kID', 'diagnosis','other', 'timestamp','ip'] 
+diagnosis_info_table = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quotechar='\'')
 diagnosis_info_table = diagnosis_info_table.replace({"''":np.nan},regex=True)
 diagnosis_info_table = diagnosis_info_table.replace({"'":""},regex=True)
 
 # from register info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/db/webform_views_register_your_baby_for_the_research_study20160130120006_fixed.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_register_your_baby_for_the_research_study20160716060022.csv"
 
 # load csv
-hdr = (['sID', 'uID', 'instructions', 'instructions1', 'instructions2','instructions3', 'email', 
+hdr = (['rID','sID', 'uID', 'instructions', 'instructions1', 'instructions2','instructions3', 'email', 
         'kID','instructionsKid','DOB','gender','firstName','middleInitial','instructions4',
         'instructions5','instructions6','timeStamp','ip'])
-register_info_data = pd.read_csv(inFile, header=0, names=hdr)
+register_info_data = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quotechar='\'')
 
 # Now let's trim useless columns and create tables
 register_info_table = register_info_data.drop('instructions',axis=1)
@@ -75,15 +79,16 @@ register_info_table = register_info_table.drop('instructions3',axis=1)
 register_info_table = register_info_table.drop('instructions4',axis=1)
 register_info_table = register_info_table.drop('instructions5',axis=1)
 register_info_table = register_info_table.drop('instructions6',axis=1)
+register_info_table['DOB'] = pd.to_datetime(register_info_table['DOB'],errors='coerce')
 register_info_table = register_info_table.replace({"''":np.nan},regex=True)
 register_info_table = register_info_table.replace({"'":""},regex=True)
 
 # from parent info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/db/webform_views_parent_info20160130120006_fixed.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_parent_info20160716060031.csv"
 
 # load csv
-hdr = (['sID','uID','numAdults','numChildren','spouseRelationship','spouseRelationshipOther',
+hdr = (['rID', 'sID','uID','numAdults','numChildren','spouseRelationship','spouseRelationshipOther',
         'spouseDOB','fatherDOB','spouseEmploymentStatus','fatherCityOfBirth','spouseEmploymentOther',
         'fatherRace','spouseOccupation','fatherRaceOther','spouseInvolved','fatherEthnicity',
         'homeLanguages','oftenEnglish','motherDOB','motherCityOfBirth','motherRace','motherRaceOther',
@@ -91,7 +96,7 @@ hdr = (['sID','uID','numAdults','numChildren','spouseRelationship','spouseRelati
         'yourCityOfBirth','yourRace','yourRaceSpecify','yourEthnicity','educationLevel','maritalStatus',
         'yourEmploymentStatus','yourEmploymentOther','yourOccupation','householdIncome','zipCode',
         'liveWithSpouse','timestamp','ip'])
-parent_info_data = pd.read_csv(inFile, header=0, names=hdr)
+parent_info_data = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quotechar='\'')
 
 # Now let's trim useless columns and create tables
 parent_info_table = parent_info_data.drop('progress',axis=1)
@@ -100,10 +105,10 @@ parent_info_table = parent_info_table.replace({"'":""},regex=True)
 
 # from family info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/db/webform_views_family_info20160130120006_fixed.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_family_info20160716060025.csv"
 
 # load csv
-hdr = (['sID', 'uID', 'f1FirstName', 'f2FirstName', 'f3FirstName','f4FirstName', 'f5FirstName', 
+hdr = (['rID','sID', 'uID', 'f1FirstName', 'f2FirstName', 'f3FirstName','f4FirstName', 'f5FirstName', 
         'f6FirstName','f7FirstName','f8FirstName','f9FirstName','f1MiddleInitial','f2MiddleInitial',
         'f3MiddleInitial', 'f4MiddleInitial','f5MiddleInitial', 'f6MiddleInitial','f7MiddleInitial',
         'f8MiddleInitial','f9MiddleInitial','f1DOB','f2DOB','f3DOB','f4DOB','f5DOB','f6DOB',
@@ -114,19 +119,21 @@ hdr = (['sID', 'uID', 'f1FirstName', 'f2FirstName', 'f3FirstName','f4FirstName',
         'f8Diagnosis','f9Diagnosis','f1AddFamily','f2AddFamily','f3AddFamily','f4AddFamily','f5AddFamily',
         'f6AddFamily','f7AddFamily','f8AddFamily','progress','email','kID',
         'babyFamilyDiagnosed','timeStamp','ip'])
-family_info_data = pd.read_csv(inFile, header=0, names=hdr)
+family_info_data = pd.read_csv(inFile, header=0, names=hdr,error_bad_lines=False,quotechar='\'')
 
 # Now let's trim useless columns and create tables
 family_info_table = family_info_data.drop('progress',axis=1)
 family_info_table = family_info_table.replace({"''":np.nan},regex=True)
 family_info_table = family_info_table.replace({"'":""},regex=True)
 
-#
-# APP DATA ---------------------------
-#
+########################################
+# ------------------------------------ #
+# APP DATA --------------------------- #
+# ------------------------------------ #
+########################################
 
 # setup io file names for app data
-inFile = "/Users/wayne/Downloads/Archive/clean_merged.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/clean_merged_new.csv"
 
 # load app data csv
 hdr = ['kidID', 'entryID', 'startTime', 'endTime', 'activity','durationMin','quantity','extraData','text','notes','caregiver','childName']
@@ -291,3 +298,18 @@ medicine_table.to_csv('medicine_table.csv',sep='\t')
 temperature_table.to_csv('temperature_table.csv',sep='\t')
 potty_table.to_csv('potty_table.csv',sep='\t')
 sleepstart_table.to_csv('sleepstart_table.csv',sep='\t')
+
+#k_dob = []
+#
+#for row in kid_table['kID']:
+#    e = register_info_table['DOB'][register_info_table['kID'] == row]
+#    e = e.tolist()
+#    k_dob.append(e)
+#
+#print 'done'
+
+#for x in range(len(kid_table['kID'])):
+#    e = register_info_table.loc[register_info_table['kID'] == kid_table['kID'][x]]
+#    k_dob.append(e['DOB'].astype(str))
+#    
+#print 'done'
