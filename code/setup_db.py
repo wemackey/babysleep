@@ -21,7 +21,7 @@ import numpy as np
 # set up web data tables
 # from baby info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_baby_info20160716060024.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_baby_info20160718060018.csv"
 
 # load csv
 hdr = (['rID','sID', 'uID', 'birthOrder', 'ofTotalBorn','deleteMe','pounds', 'ounces', 
@@ -36,7 +36,7 @@ baby_info_table = baby_info_table.replace({"'":""},regex=True)
 
 # from sibling info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_biological_sibling_info20160716060025.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_biological_sibling_info20160718060019.csv"
 
 # load csv
 hdr = (['rID', 'sID', 'uID', 'bs1FirstName', 'bs2FirstName', 'bs3FirstName','bs4FirstName', 'bs5FirstName', 
@@ -53,7 +53,7 @@ sibling_info_table = sibling_info_table.replace({"'":""},regex=True)
 
 # from diagnosis info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_child_diagnosis20160716060031.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_child_diagnosis20160718060024.csv"
 
 # load csv
 hdr = ['rID','sID', 'uID', 'email', 'kID', 'diagnosis','other', 'timestamp','ip'] 
@@ -63,7 +63,7 @@ diagnosis_info_table = diagnosis_info_table.replace({"'":""},regex=True)
 
 # from register info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_register_your_baby_for_the_research_study20160716060022.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_register_your_baby_for_the_research_study20160718060016.csv"
 
 # load csv
 hdr = (['rID','sID', 'uID', 'instructions', 'instructions1', 'instructions2','instructions3', 'email', 
@@ -85,7 +85,7 @@ register_info_table = register_info_table.replace({"'":""},regex=True)
 
 # from parent info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_parent_info20160716060031.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_parent_info20160718060024.csv"
 
 # load csv
 hdr = (['rID', 'sID','uID','numAdults','numChildren','spouseRelationship','spouseRelationshipOther',
@@ -105,7 +105,7 @@ parent_info_table = parent_info_table.replace({"'":""},regex=True)
 
 # from family info web dump
 # setup io file names
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_family_info20160716060025.csv"
+inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/webform_views_family_info20160718060019.csv"
 
 # load csv
 hdr = (['rID','sID', 'uID', 'f1FirstName', 'f2FirstName', 'f3FirstName','f4FirstName', 'f5FirstName', 
@@ -133,11 +133,33 @@ family_info_table = family_info_table.replace({"'":""},regex=True)
 ########################################
 
 # setup io file names for app data
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/clean_merged_new.csv"
+inFile = "/Users/wayne/babysleep/code/WebDumps/clean_all.csv"
 
 # load app data csv
 hdr = ['kidID', 'entryID', 'startTime', 'endTime', 'activity','durationMin','quantity','extraData','text','notes','caregiver','childName']
 data = pd.read_csv(inFile, header=0, names=hdr)
+data.startTime = pd.to_datetime(data.startTime, errors='coerce')
+data.endTime = pd.to_datetime(data.endTime, errors='coerce')
+
+# calculate and add age at time each event was logged
+k_dob = []
+register_info_table.kID = pd.to_numeric(register_info_table.kID,errors='coerce')
+
+for row in data.kidID:
+    m = register_info_table[register_info_table.kID==row]
+    if len(m) == 0:
+        k_dob.append('Not Found')
+    else:            
+        e = register_info_table[register_info_table.kID==row].index[0]
+        k_dob.append(register_info_table.DOB[e])
+        
+k_dob = pd.Series(k_dob)
+k_dob = pd.to_datetime(k_dob, errors='coerce')
+wem=pd.Series(data.startTime).copy()
+wem=wem.reset_index(drop=True)
+x=wem-k_dob
+x=x.dt.days
+data['daysOld'] = x.copy()
 
 # segment our app data into tables
 kIDs = {'kID':pd.unique(data.kidID.ravel())}

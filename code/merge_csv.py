@@ -5,15 +5,15 @@ Created on Mon Dec 14 17:33:29 2015
 @author: wayne
 """
 
-# import numpy as np
+# import numpy as np [12]
 import pandas as pd
 import matplotlib
 matplotlib.style.use('ggplot')
 
 # setup io file names
-inFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/nyu-160401.csv"
-inFile2 = "/Users/wayne/babysleep/code/ParticipantDataDumps/clean_merged_new.csv"
-outFile = "/Users/wayne/babysleep/code/ParticipantDataDumps/clean_merged_new.csv"
+inFile = "/Users/wayne/babysleep/code/WebDumps/nyu-160801-2.csv"
+inFile2 = "/Users/wayne/babysleep/code/WebDumps/clean_all.csv"
+outFile = "/Users/wayne/babysleep/code/WebDumps/clean_all.csv"
 
 # load csv
 hdr = ['kidID', 'entryID', 'startTime', 'endTime', 'activity','durationMin','quantity','extraData','text','notes','caregiver','childName']
